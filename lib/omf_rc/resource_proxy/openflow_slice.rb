@@ -10,11 +10,15 @@ module OmfRc::ResourceProxy::OpenflowSlice
   utility :openflow_slice_tools
 
   property :name, :default => nil
+  property :flowvisor_connection_args
 
+  hook :after_initial_configured do |resource|
+    resource.property.flowvisor_connection_args = resource.opts.property.flowvisor_connection_args
+  end
 
   # Before release, the related flowvisor instance should also remove the corresponding slice
   hook :before_release do |resource|
-    resource.flowvisor_connection.call("api.deleteSlice", resource.property.name)
+    # resource.flowvisor_connection.call("api.deleteSlice", resource.property.name)
   end
 
 
