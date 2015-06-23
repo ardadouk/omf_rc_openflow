@@ -4,7 +4,7 @@ module OmfRc::Util::OpenflowSliceTools
   include OmfRc::ResourceProxyDSL
 
   # The version of the flowvisor that this resource is able to control 
-  FLOWVISOR_VERSION = "FV version=flowvisor-0.8.4"
+  FLOWVISOR_VERSION = "FV version=flowvisor-1.4.0"
 
   # Parts of the regular expression that describes a flow entry for flowvisor
   FLOWVISOR_FLOWENTRY_REGEXP_DEVIDED = [
