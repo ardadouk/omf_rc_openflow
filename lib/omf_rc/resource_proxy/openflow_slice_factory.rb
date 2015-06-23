@@ -37,7 +37,12 @@ module OmfRc::ResourceProxy::OpenflowSliceFactory
       raise "The created slice must be configured with a name"
     end
     #opts = Hashie::Mash.new(opts)
-    resource.flowvisor_connection.call("api.createSlice", opts.name.to_s, *SLICE_DEFAULTS.values)
+    if opts.true_create 
+      debug "Slice '#{opts.name.to_s}' will be created on flowvisor"
+      resource.flowvisor_connection.call("api.createSlice", opts.name.to_s, *SLICE_DEFAULTS.values) 
+    else
+      debug "This is a fake slice creation for slice '#{opts.name.to_s}'"
+    end
     opts.property ||= Hashie::Mash.new
     opts.property.provider = ">> #{resource.uid}"
     opts.property.flowvisor_connection_args = resource.property.flowvisor_connection_args
@@ -48,6 +53,9 @@ module OmfRc::ResourceProxy::OpenflowSliceFactory
     resource.property.flowvisor_connection_args = FLOWVISOR_CONNECTION_DEFAULTS
   end
 
+  configure :delete_slice do |resource, value|
+    resource.flowvisor_connection.call("api.deleteSlice", value['name']) if value['name']
+  end
 
   # Configures the flowvisor connection arguments (ip adress, port, etc)
   configure :flowvisor_connection do |resource, flowvisor_connection_args|
